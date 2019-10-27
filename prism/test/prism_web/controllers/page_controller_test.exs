@@ -1,8 +1,9 @@
 defmodule PrismWeb.PageControllerTest do
   use PrismWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
-    conn = get(conn, "/")
+  test "GET /" do
+    conn = build_conn() 
+      |> get("/")
     assert html_response(conn, 200) =~ "Welcome to Phoenix!"
   end
 end
