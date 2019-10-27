@@ -21,6 +21,8 @@ defmodule PrismWeb.ConnCase do
       use Phoenix.ConnTest
       alias PrismWeb.Router.Helpers, as: Routes
 
+      import Bureaucrat.Helpers
+
       # The default endpoint for testing
       @endpoint PrismWeb.Endpoint
     end
