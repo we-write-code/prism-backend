@@ -8,10 +8,10 @@ cover/
 deps/
 
 # Where 3rd-party dependencies like ExDoc output generated docs.
-/prism/doc/
+doc/
 
 # Ignore .fetch files in case you like to edit your project deps locally.
-/prism/.fetch
+.fetch
 
 # If the VM crashes, it generates a dump, let's ignore it too.
 erl_crash.dump
@@ -34,4 +34,4 @@ tmp/
 # Since we are building assets from assets/,
 # we ignore priv/static. You may want to comment
 # this depending on your deployment strategy.
-/prism/priv/static/
+priv/static/
