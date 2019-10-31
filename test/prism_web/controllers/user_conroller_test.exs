@@ -10,11 +10,11 @@ defmodule PrismWeb.UserControllerTest do
   setup do
     user = create_user()
     conn = build_conn() |> put_req_header("authentication", @key)
-    
+
     {:ok, conn: conn, user: user}
   end
 
-  test "POST /signup", {conn: conn} do
+  test "POST /signup", %{conn: conn} do
     conn = conn
       |> post("/signup", [
             username: @create_attrs.username, 
@@ -31,7 +31,7 @@ defmodule PrismWeb.UserControllerTest do
     }
   end
 
-  test "POST /login", {conn: conn, user: user} do
+  test "POST /login", %{conn: conn, user: user} do
     conn = conn
       |> post("/login", [username: user.username, password: user.password])
       |> doc()
