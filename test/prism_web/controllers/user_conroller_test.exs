@@ -25,10 +25,10 @@ defmodule PrismWeb.UserControllerTest do
 
     user = Repo.get_by(User, username: @create_attrs.username)
 
-    assert json_response(conn, 200) =~ %{
-      id: user.id,
-      username: user.username
-    }
+    conn
+      |> json_response(200)
+      |> assert_user_json(%{ id: user.id, username: user.username })
+      |> assert()
   end
 
   test "POST /login", %{conn: conn, user: user} do
@@ -40,30 +40,30 @@ defmodule PrismWeb.UserControllerTest do
   end
 
   test "GET /user/<id>", %{conn: conn, user: user} do
-    conn = conn
+    conn
       |> get("/user/#{user.id}")
       |> doc()
-
-    assert json_response(conn, 200) =~ %{
-      id: user.id,
-      username: user.username
-    }
+      |> json_response(200)
+      |> assert_user_json(%{ id: user.id, username: user.username })
+      |> assert()
   end
 
   test "PUT /user/<id>", %{conn: conn, user: user} do
     new_data = %{username: "NEWUSER"}
 
-    conn = conn
+    conn
       |> put("/user/#{user.id}", new_data)
       |> doc()
-
-    assert json_response(conn, 200) =~ %{
-      id: user.id,
-      username: new_data.username
-    }
+      |> json_response(200)
+      |> assert_user_json(%{ id: user.id, username: new_data.username })
+      |> assert()
   end
 
   defp create_user() do
     Repo.insert!(struct(User, @create_attrs))
+  end
+
+  defp assert_user_json(response, expected) do
+    Enum.member?(response.data, expected)
   end
 end
