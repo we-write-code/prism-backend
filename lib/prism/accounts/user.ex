@@ -1,6 +1,7 @@
-defmodule Prism.User do
+defmodule Prism.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Prism.Accounts.User
 
   schema "users" do
     field :password, :string, virtual: true
@@ -12,7 +13,7 @@ defmodule Prism.User do
     timestamps()
   end
 
-  def changeset(user, attrs) do
+  def changeset(%User{} = user, attrs) do
     user
     |> cast(attrs, [:username, :password, :first_name, :last_name])
     |> validate_required([:username, :password, :first_name, :last_name])
