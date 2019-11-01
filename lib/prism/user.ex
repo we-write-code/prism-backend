@@ -25,7 +25,10 @@ defmodule Prism.User do
     |> hash_password()
   end
 
-  def hash_password(user) do
-    %{user | password_hash: user.password}
+  defp hash_password(%Ecto.Changeset{valid?: true, changes:
+  %{password: password}} = changeset) do
+    change(changeset, Argon2.add_hash(password))
   end
+
+  defp hash_password(_changeset), do: :error
 end
