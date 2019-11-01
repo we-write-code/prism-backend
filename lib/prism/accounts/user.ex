@@ -9,14 +9,16 @@ defmodule Prism.Accounts.User do
     field :first_name, :string
     field :last_name, :string
     field :username, :string
+    field :email, :string
 
     timestamps()
   end
 
   def changeset(%User{} = user, attrs) do
+    all_fields = [:username, :password, :email, :first_name, :last_name]
     user
-    |> cast(attrs, [:username, :password, :first_name, :last_name])
-    |> validate_required([:username, :password, :first_name, :last_name])
+    |> cast(attrs, all_fields)
+    |> validate_required(all_fields)
     |> validate_length(:username, min: 6)
     |> validate_length(:username, max: 64)
     |> validate_length(:password, min: 8)
