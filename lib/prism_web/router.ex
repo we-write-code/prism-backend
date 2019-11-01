@@ -21,5 +21,9 @@ defmodule PrismWeb.Router do
 
   scope "/api", PrismWeb do
     pipe_through :api
+
+    post "/login", UserController, :login
+    post "/signup", UserController, :signup
+    resources "/users", UserController, only: [:show, :update]
   end
 end

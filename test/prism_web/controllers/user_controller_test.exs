@@ -49,23 +49,23 @@ defmodule PrismWeb.UserControllerTest do
       assert conn.status == 200
     end
 
-    test "GET /api/user/<id>", %{conn: conn, user: user} do
+    test "GET /api/users/:id", %{conn: conn, user: user} do
       conn
-        |> get("/api/user/#{user.id}")
+        |> get("/api/users/#{user.id}")
         |> doc()
         |> json_response(200)
         |> assert_user_json(%{ id: user.id, username: user.username })
         |> assert()
     end
 
-    test "PUT /api/user/<id>", %{conn: conn, user: user} do
-      new_data = %{username: "NEWUSER"}
+    test "PUT /api/users/:id", %{conn: conn, user: user} do
+      new_data = %{user: %{ username: "NEWUSER" }}
 
       conn
-        |> put("/api/user/#{user.id}", new_data)
+        |> put("/api/users/#{user.id}", new_data)
         |> doc()
         |> json_response(200)
-        |> assert_user_json(%{ id: user.id, username: new_data.username })
+        |> assert_user_json(%{ id: user.id, username: new_data.user.username })
         |> assert()
     end
   end
