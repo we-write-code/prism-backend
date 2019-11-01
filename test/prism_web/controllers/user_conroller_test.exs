@@ -41,7 +41,7 @@ defmodule PrismWeb.UserControllerTest do
 
   test "GET /user/<id>", %{conn: conn, user: user} do
     conn = conn
-      |> get("/user/" <> user.id)
+      |> get("/user/#{user.id}")
       |> doc()
 
     assert json_response(conn, 200) =~ %{
@@ -54,7 +54,7 @@ defmodule PrismWeb.UserControllerTest do
     new_data = %{username: "NEWUSER"}
 
     conn = conn
-      |> put("/user/" <> user.id, new_data)
+      |> put("/user/#{user.id}", new_data)
       |> doc()
 
     assert json_response(conn, 200) =~ %{
