@@ -3,69 +3,80 @@ defmodule PrismWeb.UserControllerTest do
 
   alias Prism.User
   alias Prism.Repo
+  alias PrismWeb.Endpoint
 
   @create_attrs %{username: "TESTUSER", password: "TESTPWD"}
-  user = nil
-  token = nil
 
-  setup do
-    user = user || create_user()
-    conn = build_conn()
-    token = token || Phoenix.Token.sign(conn, "PRISM#{user.username}", user.id)
+  describe "Userless Tests" do
+    setup do
+      {:ok, conn: setup_conn()}
+    end
 
-    conn = conn
-      |> put_req_header("Authorization", token)
+    test "POST /signup", %{conn: conn} do
+      conn = conn
+        |> post("/signup", [
+              username: @create_attrs.username,
+              password: @create_attrs.password
+            ]
+          )
+        |> doc()
 
-    {:ok, conn: conn, user: user}
+      user = Repo.get_by(User, username: @create_attrs.username)
+
+      conn
+        |> json_response(200)
+        |> assert_user_json(%{ id: user.id, username: user.username })
+        |> assert()
+    end
   end
 
-  test "POST /signup", %{conn: conn} do
-    conn = conn
-      |> post("/signup", [
-            username: @create_attrs.username,
-            password: @create_attrs.password
-          ]
-        )
-      |> doc()
+  describe "Tests requiring existing Users" do
+    setup do
+      user = setup_user()
+      token = Phoenix.Token.sign(Endpoint, "PRISM#{user.username}", user.id)
 
-    user = Repo.get_by(User, username: @create_attrs.username)
+      conn = setup_conn()
+        |> put_req_header("authorization", token)
 
-    conn
-      |> json_response(200)
-      |> assert_user_json(%{ id: user.id, username: user.username })
-      |> assert()
+      {:ok, conn: conn, user: user}
+    end
+
+    test "POST /login", %{conn: conn, user: user} do
+      conn = conn
+        |> post("/login", [username: user.username, password: user.password])
+        |> doc()
+
+      assert conn.status == 200
+    end
+
+    test "GET /user/<id>", %{conn: conn, user: user} do
+      conn
+        |> get("/user/#{user.id}")
+        |> doc()
+        |> json_response(200)
+        |> assert_user_json(%{ id: user.id, username: user.username })
+        |> assert()
+    end
+
+    test "PUT /user/<id>", %{conn: conn, user: user} do
+      new_data = %{username: "NEWUSER"}
+
+      conn
+        |> put("/user/#{user.id}", new_data)
+        |> doc()
+        |> json_response(200)
+        |> assert_user_json(%{ id: user.id, username: new_data.username })
+        |> assert()
+    end
   end
 
-  test "POST /login", %{conn: conn, user: user} do
-    conn = conn
-      |> post("/login", [username: user.username, password: user.password])
-      |> doc()
-
-    assert conn.status == 200
-  end
-
-  test "GET /user/<id>", %{conn: conn, user: user} do
-    conn
-      |> get("/user/#{user.id}")
-      |> doc()
-      |> json_response(200)
-      |> assert_user_json(%{ id: user.id, username: user.username })
-      |> assert()
-  end
-
-  test "PUT /user/<id>", %{conn: conn, user: user} do
-    new_data = %{username: "NEWUSER"}
-
-    conn
-      |> put("/user/#{user.id}", new_data)
-      |> doc()
-      |> json_response(200)
-      |> assert_user_json(%{ id: user.id, username: new_data.username })
-      |> assert()
-  end
-
-  defp create_user() do
+  defp setup_user() do
     Repo.insert!(struct(User, @create_attrs))
+  end
+
+  defp setup_conn() do
+    build_conn()
+      |> put_req_header("accept", "application/json")
   end
 
   defp assert_user_json(response, expected) do
