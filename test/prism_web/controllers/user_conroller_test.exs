@@ -39,6 +39,17 @@ defmodule PrismWeb.UserControllerTest do
     assert conn.status == 200
   end
 
+  test "GET /user/<id>", %{conn: conn, user: user} do
+    conn = conn
+      |> get("/user/" <> user.id)
+      |> doc()
+
+    assert json_response(conn, 200) =~ %{
+      id: user.id,
+      username: user.username
+    }
+  end
+
   defp create_user() do
     Repo.insert!(struct(User, @create_attrs))
   end
