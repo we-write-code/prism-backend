@@ -17,7 +17,7 @@ defmodule PrismWeb.UserControllerTest do
   test "POST /signup", %{conn: conn} do
     conn = conn
       |> post("/signup", [
-            username: @create_attrs.username, 
+            username: @create_attrs.username,
             password: @create_attrs.password
           ]
         )
@@ -26,8 +26,8 @@ defmodule PrismWeb.UserControllerTest do
     user = Repo.get_by(User, username: @create_attrs.username)
 
     assert json_response(conn, 200) =~ %{
-      "id": user.id,
-      "username": user.username
+      id: user.id,
+      username: user.username
     }
   end
 
