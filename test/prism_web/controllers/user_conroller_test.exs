@@ -5,11 +5,16 @@ defmodule PrismWeb.UserControllerTest do
   alias Prism.Repo
 
   @create_attrs %{username: "TESTUSER", password: "TESTPWD"}
-  @key ""
+  user = nil
+  token = nil
 
   setup do
-    user = create_user()
-    conn = build_conn() |> put_req_header("authentication", @key)
+    user = user || create_user()
+    conn = build_conn()
+    token = token || Phoenix.Token.sign(conn, "PRISM#{user.username}", user.id)
+
+    conn = conn
+      |> put_req_header("Authorization", token)
 
     {:ok, conn: conn, user: user}
   end
