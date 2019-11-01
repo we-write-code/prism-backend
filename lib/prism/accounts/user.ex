@@ -24,7 +24,7 @@ defmodule Prism.Accounts.User do
     |> validate_length(:password, min: 8)
     |> unique_constraint(:username)
     |> unique_constraint(:email)
-    |> validate_format(:email, ~r/.+@-+/)
+    |> validate_format(:email, ~r/.+@.+/)
     |> hash_password()
   end
 
