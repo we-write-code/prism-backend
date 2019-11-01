@@ -25,6 +25,11 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Change Password hashing configuration to desireable values
+# t_cost defines the number of iterations
+# m_cost deifines the number of memory used in powers of 2 (KiB)
+config :argon2_elixir, t_cost: 10, m_cost: 18
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
