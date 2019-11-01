@@ -50,6 +50,19 @@ defmodule PrismWeb.UserControllerTest do
     }
   end
 
+  test "PUT /user/<id>", %{conn: conn, user: user} do
+    new_data = %{username: "NEWUSER"}
+
+    conn = conn
+      |> put("/user/" <> user.id, new_data)
+      |> doc()
+
+    assert json_response(conn, 200) =~ %{
+      id: user.id,
+      username: new_data.username
+    }
+  end
+
   defp create_user() do
     Repo.insert!(struct(User, @create_attrs))
   end
