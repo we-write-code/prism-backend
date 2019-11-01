@@ -12,9 +12,9 @@ defmodule PrismWeb.UserControllerTest do
       {:ok, conn: setup_conn()}
     end
 
-    test "POST /signup", %{conn: conn} do
+    test "POST /api/signup", %{conn: conn} do
       conn = conn
-        |> post("/signup", [
+        |> post("/api/signup", [
               username: @create_attrs.username,
               password: @create_attrs.password
             ]
@@ -41,28 +41,28 @@ defmodule PrismWeb.UserControllerTest do
       {:ok, conn: conn, user: user}
     end
 
-    test "POST /login", %{conn: conn, user: user} do
+    test "POST /api/login", %{conn: conn, user: user} do
       conn = conn
-        |> post("/login", [username: user.username, password: user.password])
+        |> post("/api/login", [username: user.username, password: user.password])
         |> doc()
 
       assert conn.status == 200
     end
 
-    test "GET /user/<id>", %{conn: conn, user: user} do
+    test "GET /api/user/<id>", %{conn: conn, user: user} do
       conn
-        |> get("/user/#{user.id}")
+        |> get("/api/user/#{user.id}")
         |> doc()
         |> json_response(200)
         |> assert_user_json(%{ id: user.id, username: user.username })
         |> assert()
     end
 
-    test "PUT /user/<id>", %{conn: conn, user: user} do
+    test "PUT /api/user/<id>", %{conn: conn, user: user} do
       new_data = %{username: "NEWUSER"}
 
       conn
-        |> put("/user/#{user.id}", new_data)
+        |> put("/api/user/#{user.id}", new_data)
         |> doc()
         |> json_response(200)
         |> assert_user_json(%{ id: user.id, username: new_data.username })

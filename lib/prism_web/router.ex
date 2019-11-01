@@ -19,8 +19,7 @@ defmodule PrismWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", PrismWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", PrismWeb do
+    pipe_through :api
+  end
 end
