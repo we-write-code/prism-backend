@@ -5,6 +5,8 @@ defmodule Prism.User do
   schema "users" do
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :first_name, :string
+    field :last_name, :string
     field :username, :string
 
     timestamps()
@@ -12,10 +14,14 @@ defmodule Prism.User do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :password])
-    |> validate_required([:name, :password])
-    |> validate_length(:name, min: 6)
-    |> validate_length(:name, max: 25)
+    |> cast(attrs, [:username, :password, :first_name, :last_name])
+    |> validate_required([:username, :password, :first_name, :last_name])
+    |> validate_length(:username, min: 6)
+    |> validate_length(:username, max: 64)
+    |> validate_length(:password, min: 8)
+    |> unique_constraint(:username)
+    |> unique_constraint(:email)
+    |> validate_format(:email, ~r/.+@-+/)
     |> hash_password()
   end
 
