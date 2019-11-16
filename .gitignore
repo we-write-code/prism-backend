@@ -28,6 +28,9 @@ tmp/
 # VS Code Data
 .vscode/
 
+# Jetbrains IDEs
+.idea/
+
 # Elixir-LS Data
 .elixir_ls/
 
