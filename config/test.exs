@@ -5,7 +5,7 @@ config :prism, Prism.Repo,
   username: "postgres",
   password: "postgres",
   database: "prism_test",
-  hostname: "localhost",
+  hostname: "postgres",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,

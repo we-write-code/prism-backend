@@ -1,0 +1,19 @@
+version: '3'
+services:
+  prism:
+    build: .
+    links:
+      - postgres
+    ports:
+      - "127.0.0.1:4000:4000"
+    volumes:
+      - .:/prism
+
+  postgres:
+      image: postgres:9.6-alpine
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      volumes:
+        - ./docker/resources/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+

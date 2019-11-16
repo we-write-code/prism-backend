@@ -1,0 +1,7 @@
+CREATE DATABASE prism_dev;
+CREATE DATABASE prism_test;
+CREATE DATABASE prism_prod;
+
+GRANT ALL PRIVILEGES ON DATABASE prism_dev TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE prism_test TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE prism_prod TO postgres;
